@@ -1,0 +1,59 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function isSignedIn() { return request.auth != null; }
+
+    function isAdmin() {
+      return isSignedIn() && request.auth.token.email_verified == true &&
+             request.auth.token.email == 'nicole.valbuena@colegiomonterrosales.edu.co';
+    }
+
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+
+    function isValidPreRegistration(data) {
+      return data.keys().hasAll(['name', 'email', 'createdAt']) &&
+             data.keys().hasOnly(['name', 'email', 'committee_interest', 'createdAt']) &&
+             data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+             data.email is string && data.email.size() > 0 && data.email.size() <= 150 &&
+             (data.keys().hasAll(['committee_interest']) ? (data.committee_interest is string && data.committee_interest.size() <= 100) : true) &&
+             data.createdAt == request.time;
+    }
+
+    function isValidVisitCreate(data) {
+       return data.keys().hasAll(['visitorId', 'createdAt', 'lastActivityAt', 'durationSeconds']) &&
+              data.keys().hasOnly(['visitorId', 'createdAt', 'lastActivityAt', 'durationSeconds']) &&
+              data.visitorId is string && data.visitorId.size() > 0 && data.visitorId.size() <= 128 &&
+              data.createdAt == request.time &&
+              data.lastActivityAt == request.time &&
+              data.durationSeconds == 0;
+    }
+
+    function isValidVisitUpdate(data) {
+       return data.keys().hasAll(['visitorId', 'createdAt', 'lastActivityAt', 'durationSeconds']) &&
+              data.keys().hasOnly(['visitorId', 'createdAt', 'lastActivityAt', 'durationSeconds']) &&
+              data.visitorId == existing().visitorId &&
+              data.createdAt == existing().createdAt &&
+              data.lastActivityAt == request.time &&
+              data.durationSeconds is number; // Allow duration calculation
+    }
+
+    match /preRegistrations/{registrationId} {
+      allow create: if isValidId(registrationId) && isValidPreRegistration(incoming());
+      allow read, list: if isAdmin();
+      allow update, delete: if false; 
+    }
+
+    match /visits/{visitId} {
+      allow create: if isValidId(visitId) && isValidVisitCreate(incoming());
+      allow update: if isValidId(visitId) && isValidVisitUpdate(incoming());
+      allow read, list: if isAdmin();
+      allow delete: if false;
+    }
+  }
+}

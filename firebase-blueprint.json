@@ -1,0 +1,66 @@
+{
+  "entities": {
+    "PreRegistration": {
+      "title": "Pre-Registration",
+      "description": "A pre-registration entry for the MUN event.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Full name of the participant."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address."
+        },
+        "committee_interest": {
+          "type": "string",
+          "description": "The committee they are interested in."
+        },
+        "createdAt": {
+          "type": "number",
+          "description": "Timestamp of registration"
+        }
+      },
+      "required": ["name", "email", "createdAt"]
+    },
+    "Visit": {
+      "title": "Visit",
+      "description": "A site visit session.",
+      "type": "object",
+      "properties": {
+        "visitorId": {
+          "type": "string",
+          "description": "Unique UUID for the visitor's browser."
+        },
+        "createdAt": {
+          "type": "number",
+          "description": "Timestamp of first visit."
+        },
+        "lastActivityAt": {
+          "type": "number",
+          "description": "Timestamp of last activity/ping."
+        },
+        "durationSeconds": {
+          "type": "number",
+          "description": "Calculated duration in seconds."
+        }
+      },
+      "required": ["visitorId", "createdAt", "lastActivityAt", "durationSeconds"]
+    }
+  },
+  "firestore": {
+    "preRegistrations/{registrationId}": {
+      "schema": {
+        "$ref": "#/entities/PreRegistration"
+      },
+      "description": "Collection of pre-registrations. Public to create, admin read."
+    },
+    "visits/{visitId}": {
+      "schema": {
+        "$ref": "#/entities/Visit"
+      },
+      "description": "Log of site visits."
+    }
+  }
+}
