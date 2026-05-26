@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { MessageCircle, X, Send, ChevronRight, Loader2 } from 'lucide-react';
 import { GoogleGenAI } from '@google/genai';
 
-const apiKey = typeof process !== 'undefined' && process.env ? process.env.GEMINI_API_KEY : (import.meta as any).env?.VITE_GEMINI_API_KEY;
+// @ts-ignore
+const apiKey = typeof process !== 'undefined' && process.env && process.env.GEMINI_API_KEY ? process.env.GEMINI_API_KEY : import.meta.env.VITE_GEMINI_API_KEY;
 const ai = new GoogleGenAI({ apiKey: apiKey || 'dummy-key' });
 
 export default function EcoAssistant() {
