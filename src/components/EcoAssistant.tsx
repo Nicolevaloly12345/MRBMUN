@@ -76,9 +76,9 @@ REGLA DE ORO: Mantén respuestas útiles y concisas. Actúa 100% como el persona
       const botText = response.text || '¡Yip! Parece que me distraje mirando una mariposa. ¿Me repites la pregunta? 🦊';
       
       setMessages(prev => [...prev, { role: 'eco', text: botText }]);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error generating response:", error);
-      setMessages(prev => [...prev, { role: 'eco', text: '¡Uy! Qué penita, un pequeño zumbido en mis orejas no me dejó procesar eso. ¿Puedes intentarlo de nuevo? 🦊' }]);
+      setMessages(prev => [...prev, { role: 'eco', text: `¡Uy! Error: ${error?.message || "Algo salió mal"}` }]);
     } finally {
       setIsLoading(false);
     }
