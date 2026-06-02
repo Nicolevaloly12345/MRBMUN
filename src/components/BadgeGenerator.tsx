@@ -1,12 +1,14 @@
 import React, { useState, useRef, MouseEvent } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
-import { Download, Fingerprint, Globe } from 'lucide-react';
+import { Download, Fingerprint, Globe, User } from 'lucide-react';
 import html2canvas from 'html2canvas';
+import { UN_COUNTRIES } from '../lib/countries';
 
 export function BadgeGenerator() {
   const [name, setName] = useState('');
-  const [country, setCountry] = useState('Colombia');
   const [committee, setCommittee] = useState('ONU Mujeres');
+  const [country, setCountry] = useState('Afganistán');
+  const [character, setCharacter] = useState('');
   const badgeRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -112,23 +114,6 @@ export function BadgeGenerator() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Delegación (País)</label>
-              <select
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-burgundy/50 transition-all focus:outline-none bg-white"
-                value={country}
-                onChange={(e) => setCountry(e.target.value)}
-              >
-                <option value="Colombia">Colombia</option>
-                <option value="Estados Unidos">Estados Unidos</option>
-                <option value="Francia">Francia</option>
-                <option value="Reino Unido">Reino Unido</option>
-                <option value="Rusia">Rusia</option>
-                <option value="China">China</option>
-                <option value="Suiza">Suiza</option>
-                <option value="Brasil">Brasil</option>
-              </select>
-            </div>
-            <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Comité</label>
               <select
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-burgundy/50 transition-all focus:outline-none bg-white"
@@ -144,6 +129,32 @@ export function BadgeGenerator() {
                 <option value="Prensa">Prensa</option>
               </select>
             </div>
+            {committee === 'Crisis Unicameral' ? (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Personaje</label>
+                <input
+                  type="text"
+                  maxLength={30}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-burgundy/50 transition-all focus:outline-none bg-white"
+                  placeholder="Ej. Emperador de Japón"
+                  value={character}
+                  onChange={(e) => setCharacter(e.target.value)}
+                />
+              </div>
+            ) : (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Delegación (País)</label>
+                <select
+                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-burgundy/50 transition-all focus:outline-none bg-white"
+                  value={country}
+                  onChange={(e) => setCountry(e.target.value)}
+                >
+                  {UN_COUNTRIES.map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </select>
+              </div>
+            )}
             <div className="pt-4">
               <button
                 onClick={handleDownload}
@@ -204,7 +215,11 @@ export function BadgeGenerator() {
                       {name || 'Tu Nombre'}
                     </h2>
                     <p className="text-gray-500 font-medium text-sm mb-4 uppercase tracking-wide flex items-center gap-1">
-                      <Globe size={14} /> {country}
+                      {committee === 'Crisis Unicameral' ? (
+                        <><User size={14} /> {character || 'Tu Personaje'}</>
+                      ) : (
+                        <><Globe size={14} /> {country || 'País'}</>
+                      )}
                     </p>
                     
                     <div className="w-full bg-snow rounded-xl p-3 border border-gray-100 flex flex-col items-center">

@@ -318,7 +318,7 @@ export default function LandingPage({ onEnterPortal, onAdminAccess }: { onEnterP
                 level: 'Político-filosófica',
                 topics: ['¿Bajo qué principios morales se debe guiar la política?'],
                 board: 'Valeria González, Sarah Figueira',
-                manual: null
+                manual: '/MANUAL POLITÍCO FILOSOFICO VIP  (1).pdf'
               },
               {
                 icon: <Shield className="text-gold" size={32} />,
@@ -340,7 +340,7 @@ export default function LandingPage({ onEnterPortal, onAdminAccess }: { onEnterP
                   'B) Salud mental en adolescentes en la era digital.'
                 ],
                 board: 'Luciana Patiño, Sofía Dávila, María José Neira',
-                manual: null
+                manual: '/MANUAL OMS.pdf'
               },
               {
                 icon: <Landmark className="text-gold" size={32} />,
@@ -363,7 +363,7 @@ export default function LandingPage({ onEnterPortal, onAdminAccess }: { onEnterP
                   'B) Matrimonios forzados como violencia de género.'
                 ],
                 board: 'Anarelys Sosa, Maria Paula Sánchez',
-                manual: null
+                manual: '/MANUAL ONU MUJERES.pdf'
               },
               {
                 icon: <Globe className="text-gold" size={32} />,
