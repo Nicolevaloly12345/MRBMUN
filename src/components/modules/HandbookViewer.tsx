@@ -7,8 +7,7 @@ import 'react-pdf/dist/Page/AnnotationLayer.css';
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 export default function HandbookViewer() {
-  const [language, setLanguage] = useState<'es' | 'en'>('es');
-  const pdfUrl = language === 'es' ? "/HANDBOOK MRBMUN .pdf" : "/HANDBOOK_MRBMUN_ENGLISH.pdf";
+  const pdfUrl = "/HANDBOOK.pdf";
   
   const [numPages, setNumPages] = useState<number | null>(null);
   const [pageNumber, setPageNumber] = useState(1);
@@ -18,39 +17,8 @@ export default function HandbookViewer() {
     setNumPages(numPages);
   }
 
-  const handleLanguageChange = (lang: 'es' | 'en') => {
-    setLanguage(lang);
-    setPageNumber(1);
-    setScale(1.0);
-  };
-
   return (
     <div className="h-[calc(100vh-180px)] w-full flex flex-col bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-      <div className="flex justify-between items-center px-4 py-3 border-b border-gray-100 bg-white">
-        <div className="flex items-center gap-2 bg-gray-100 p-1 rounded-lg">
-          <button
-            onClick={() => handleLanguageChange('es')}
-            className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
-              language === 'es' 
-                ? 'bg-white text-burgundy shadow-sm' 
-                : 'text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            Handbook en Español
-          </button>
-          <button
-            onClick={() => handleLanguageChange('en')}
-            className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
-              language === 'en' 
-                ? 'bg-white text-burgundy shadow-sm' 
-                : 'text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            Handbook in English
-          </button>
-        </div>
-      </div>
-      
       <div className="flex justify-between items-center p-3 border-b border-gray-100 bg-gray-50 flex-wrap gap-2">
         <div className="flex items-center gap-2">
           <button 
