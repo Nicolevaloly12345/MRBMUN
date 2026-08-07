@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Globe, Users, Shield, BookOpen, ChevronRight, Menu, X, Mail, MapPin, Instagram, Phone, Calendar, Clock, CheckCircle, Swords, Landmark, Network, Youtube } from 'lucide-react';
+import { Globe, Users, Shield, BookOpen, ChevronRight, Menu, X, Mail, MapPin, Instagram, Phone, Calendar, Clock, CheckCircle, Swords, Landmark, Network, Youtube, Scale } from 'lucide-react';
 import EcoAssistant from '../components/EcoAssistant';
 import { PdfViewer } from '../components/PdfViewer';
 import { GoogleTranslate } from '../components/GoogleTranslate';
@@ -13,18 +13,18 @@ import InteractiveEmblem from '../components/InteractiveEmblem';
 
 export default function LandingPage({ onEnterPortal, onAdminAccess }: { onEnterPortal: () => void, onAdminAccess?: () => void }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-  const [isTimeUp, setIsTimeUp] = useState(false);
   const [showNicoleModal, setShowNicoleModal] = useState(false);
   const [selectedManual, setSelectedManual] = useState<string | null>(null);
+  const [comitesTimeLeft, setComitesTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [isComitesTimeUp, setIsComitesTimeUp] = useState(false);
 
   useEffect(() => {
-    const targetDate = new Date('2026-05-19T08:00:00').getTime();
+    // 11 de agosto 2026, 10:45 AM (Colombia time is UTC-5)
+    const targetDate = new Date('2026-08-11T10:45:00-05:00').getTime();
     
-    // Check immediately to handle if time is already up
     const initialDistance = targetDate - new Date().getTime();
     if (initialDistance <= 0) {
-      setIsTimeUp(true);
+      setIsComitesTimeUp(true);
     }
     
     const interval = setInterval(() => {
@@ -33,12 +33,12 @@ export default function LandingPage({ onEnterPortal, onAdminAccess }: { onEnterP
       
       if (distance <= 0) {
         clearInterval(interval);
-        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-        if (!isTimeUp) setIsTimeUp(true);
+        setComitesTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        if (!isComitesTimeUp) setIsComitesTimeUp(true);
         return;
       }
       
-      setTimeLeft({
+      setComitesTimeLeft({
         days: Math.floor(distance / (1000 * 60 * 60 * 24)),
         hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
         minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
@@ -47,39 +47,7 @@ export default function LandingPage({ onEnterPortal, onAdminAccess }: { onEnterP
     }, 1000);
     
     return () => clearInterval(interval);
-  }, [isTimeUp]);
-
-  // WOW Effect when time reaches zero
-  useEffect(() => {
-    if (isTimeUp) {
-      const duration = 15 * 1000;
-      const animationEnd = Date.now() + duration;
-      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
-      const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
-
-      const fireworksInterval: any = setInterval(function() {
-        const remaining = animationEnd - Date.now();
-
-        if (remaining <= 0) {
-          return clearInterval(fireworksInterval);
-        }
-
-        const particleCount = 50 * (remaining / duration);
-        confetti({
-          ...defaults, particleCount,
-          origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
-          colors: ['#800020', '#FFD700', '#ffffff', '#b3002d']
-        });
-        confetti({
-          ...defaults, particleCount,
-          origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
-          colors: ['#800020', '#FFD700', '#ffffff', '#b3002d']
-        });
-      }, 250);
-      
-      return () => clearInterval(fireworksInterval);
-    }
-  }, [isTimeUp]);
+  }, [isComitesTimeUp]);
 
   const triggerConfetti = (memberName: string) => {
     if (memberName.includes("Nicole")) {
@@ -302,120 +270,116 @@ export default function LandingPage({ onEnterPortal, onAdminAccess }: { onEnterP
             <p className="text-gray-600 max-w-2xl mx-auto text-lg">Conoce los escenarios donde se debatirán las crisis y resoluciones más apremiantes a nivel mundial.</p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                icon: <Swords className="text-gold" size={32} />,
-                name: 'CRISIS UNICAMERAL',
-                level: 'Crisis',
-                topics: ['Invasión mongola a Japón (1281)'],
-                board: 'Miguel Elías Sudano, Sofía Mariangely Gomez, Juan Fernando García, José Miguel Becerra, Anneth Mariana Luna Sánchez',
-                manual: 'https://drive.google.com/file/d/11AhftsBFwrrVfnQNhvw7xG_2wFu2btaG/view?usp=sharing'
-              },
-              {
-                icon: <BookOpen className="text-gold" size={32} />,
-                name: 'COMITÉ POLÍTICO-FILOSÓFICO VIP',
-                level: 'Político-filosófica',
-                topics: ['¿Bajo qué principios morales se debe guiar la política?'],
-                board: 'Valeria González, Sarah Figueira',
-                manual: '/MANUAL POLITÍCO FILOSOFICO VIP  (1).pdf'
-              },
-              {
-                icon: <Shield className="text-gold" size={32} />,
-                name: 'DISEC',
-                level: 'Regular',
-                topics: [
-                  'A) Regulating the use of AI-Enabled lethal autonomous weapons systems.',
-                  'B) Proliferation of weapons in the conflict between Iran, Israel, and the US.'
-                ],
-                board: 'Sara Sánchez, Valentina Gutiérrez',
-                manual: '/DISEC guide MRBMUN 2026.pdf'
-              },
-              {
-                icon: <Network className="text-gold" size={32} />,
-                name: 'OMS',
-                level: 'Regular',
-                topics: [
-                  'A) Impacto económico y social de la obesidad en México.',
-                  'B) Salud mental en adolescentes en la era digital.'
-                ],
-                board: 'Luciana Patiño, Sofía Dávila, María José Neira',
-                manual: '/MANUAL OMS.pdf'
-              },
-              {
-                icon: <Landmark className="text-gold" size={32} />,
-                name: 'FMI',
-                level: 'Regular',
-                topics: [
-                  'A) Dependencia económica y soberanía estatal.',
-                  'B) El papel de los organismos en la estabilización económica.',
-                  'C) Financiamiento de políticas para reducir pobreza.'
-                ],
-                board: 'María Fernanda Moya, Isabella Moniello',
-                manual: '/MANUAL FMI .pdf'
-              },
-              {
-                icon: <Users className="text-gold" size={32} />,
-                name: 'ONU MUJERES',
-                level: 'Regular',
-                topics: [
-                  'A) Deconstrucción de ideologías misóginas en internet.',
-                  'B) Matrimonios forzados como violencia de género.'
-                ],
-                board: 'Anarelys Sosa, Maria Paula Sánchez',
-                manual: '/MANUAL ONU MUJERES.pdf'
-              },
-              {
-                icon: <Globe className="text-gold" size={32} />,
-                name: 'PRENSA',
-                level: 'Especial',
-                topics: [
-                  'Cubrimiento oficial, reportajes y crónicas del modelo.'
-                ],
-                board: 'María Fernanda Moya Osorio',
-                manual: '/MANUAL PRENSA.pdf'
-              }
-            ].map((com, idx) => (
-              <div key={idx} className="bg-white p-8 rounded-[2rem] shadow-xl shadow-gray-200/30 border border-gray-100 hover:border-gold/50 transition-all hover:-translate-y-2 group relative overflow-hidden flex flex-col">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 rounded-bl-[100px] transition-transform group-hover:scale-110"></div>
-                <div className="mb-8 p-4 bg-snow inline-block rounded-2xl group-hover:bg-burgundy/5 transition-colors z-10 self-start">{com.icon}</div>
-                <h3 className="text-2xl font-serif font-bold text-burgundy mb-3 relative z-10">{com.name}</h3>
-                <div className="relative z-10 self-start">
-                  <span className="inline-flex px-4 py-1.5 bg-burgundy/5 text-burgundy text-[10px] font-bold uppercase tracking-wider rounded-full mb-6 border border-burgundy/10">{com.level}</span>
+          {!isComitesTimeUp ? (
+            <div className="bg-white rounded-3xl p-10 md:p-16 shadow-xl border border-gray-100 flex flex-col items-center justify-center text-center max-w-4xl mx-auto relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 rounded-bl-[100px]"></div>
+              <Clock className="text-gold w-20 h-20 mb-6 animate-pulse relative z-10" />
+              <h3 className="text-3xl md:text-4xl font-serif font-bold text-burgundy mb-4 relative z-10">Pronto aparecerán los comités elegidos</h3>
+              <p className="text-xl text-gray-600 mb-10 relative z-10">Prepárense para conocer los escenarios oficiales.</p>
+              
+              <div className="flex flex-wrap justify-center gap-4 md:gap-8 relative z-10">
+                <div className="text-center">
+                  <span className="block text-4xl md:text-6xl font-bold text-burgundy bg-gray-50 rounded-2xl p-4 min-w-[100px] shadow-sm border border-gray-100">{comitesTimeLeft.days}</span>
+                  <span className="text-sm font-bold text-gray-500 uppercase mt-2 block tracking-wider">Días</span>
                 </div>
-                
-                <div className="flex-1 relative z-10 mb-6">
-                  <strong className="text-burgundy block mb-2">{com.topics.length > 1 ? 'Tópicos:' : 'Tópico:'}</strong>
-                  <ul className="space-y-1">
-                    {com.topics.map((t, i) => (
-                      <li key={i} className="text-gray-600 text-sm leading-relaxed">{t}</li>
-                    ))}
-                  </ul>
+                <div className="text-center">
+                  <span className="block text-4xl md:text-6xl font-bold text-burgundy bg-gray-50 rounded-2xl p-4 min-w-[100px] shadow-sm border border-gray-100">{comitesTimeLeft.hours}</span>
+                  <span className="text-sm font-bold text-gray-500 uppercase mt-2 block tracking-wider">Horas</span>
                 </div>
-
-                <div className="pt-5 border-t border-gray-100 flex flex-col gap-4 relative z-10">
-                   <div className="flex items-center gap-3">
-                     <div className="w-10 h-10 shrink-0 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full border border-gray-200 flex items-center justify-center">
-                       <Users size={16} className="text-gray-400" />
-                     </div>
-                     <div className="text-sm">
-                       <p className="font-bold text-burgundy text-xs uppercase tracking-wider">Mesa Directiva</p>
-                       <p className="text-gray-500 font-medium text-xs line-clamp-2 leading-snug">{com.board}</p>
-                     </div>
-                   </div>
-                   
-                   {com.manual && (
-                     <button 
-                       onClick={() => setSelectedManual(com.manual!)}
-                       className="mt-2 text-center text-sm font-bold text-white bg-burgundy py-2.5 px-4 rounded-xl hover:bg-burgundy/90 transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
-                     >
-                       <BookOpen size={16} /> Ver Manual
-                     </button>
-                   )}
+                <div className="text-center">
+                  <span className="block text-4xl md:text-6xl font-bold text-burgundy bg-gray-50 rounded-2xl p-4 min-w-[100px] shadow-sm border border-gray-100">{comitesTimeLeft.minutes}</span>
+                  <span className="text-sm font-bold text-gray-500 uppercase mt-2 block tracking-wider">Min</span>
+                </div>
+                <div className="text-center">
+                  <span className="block text-4xl md:text-6xl font-bold text-burgundy bg-gray-50 rounded-2xl p-4 min-w-[100px] shadow-sm border border-gray-100">{comitesTimeLeft.seconds}</span>
+                  <span className="text-sm font-bold text-gray-500 uppercase mt-2 block tracking-wider">Seg</span>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+              {[
+                {
+                  icon: <Shield className="text-gold" size={32} />,
+                  name: 'Consejo de Seguridad Retro',
+                  level: 'Regular',
+                  topics: ['Crisis de los Misiles en Cuba (1962)'],
+                  board: 'Miguel Elías Sudano, Maria Paula Sánchez',
+                  manual: null
+                },
+                {
+                  icon: <Landmark className="text-gold" size={32} />,
+                  name: 'Asamblea Constituyente',
+                  level: 'Legislativa',
+                  topics: ['Asamblea Nacional Constituyente (1991)'],
+                  board: 'Valeria Niño, Salomé Hernández',
+                  manual: null
+                },
+                {
+                  icon: <Scale className="text-gold" size={32} />,
+                  name: 'Corte',
+                  level: 'Corte',
+                  topics: ['Caso de los 43 estudiantes de Ayotzinapa en México (2014)'],
+                  board: 'Maria Fernanda Moya, Maria José Roldán',
+                  manual: null
+                },
+                {
+                  icon: <Swords className="text-gold" size={32} />,
+                  name: 'Crisis Unicameral',
+                  level: 'Crisis',
+                  topics: ['Segunda Guerra Mágica'],
+                  board: 'Maria Valentina Alfonso, Manuel Simón Galeano. Staff: Nicole Valbuena, Amy Samhara Méndez, Elisa Velasquez',
+                  manual: null
+                }
+              ].map((com, idx) => (
+                <div key={idx} className="bg-white p-8 rounded-[2rem] shadow-xl shadow-gray-200/30 border border-gray-100 hover:border-gold/50 transition-all hover:-translate-y-2 group relative overflow-hidden flex flex-col">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 rounded-bl-[100px] transition-transform group-hover:scale-110"></div>
+                  <div className="mb-8 p-4 bg-snow inline-block rounded-2xl group-hover:bg-burgundy/5 transition-colors z-10 self-start">{com.icon}</div>
+                  <h3 className="text-2xl font-serif font-bold text-burgundy mb-3 relative z-10">{com.name}</h3>
+                  <div className="relative z-10 self-start">
+                    <span className="inline-flex px-4 py-1.5 bg-burgundy/5 text-burgundy text-[10px] font-bold uppercase tracking-wider rounded-full mb-6 border border-burgundy/10">{com.level}</span>
+                  </div>
+                  
+                  <div className="flex-1 relative z-10 mb-6">
+                    <strong className="text-burgundy block mb-2">{com.topics.length > 1 ? 'Tópicos:' : 'Tópico:'}</strong>
+                    <ul className="space-y-1">
+                      {com.topics.map((t, i) => (
+                        <li key={i} className="text-gray-600 text-sm leading-relaxed">{t}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="pt-5 border-t border-gray-100 flex flex-col gap-4 relative z-10">
+                     <div className="flex items-center gap-3">
+                       <div className="w-10 h-10 shrink-0 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full border border-gray-200 flex items-center justify-center">
+                         <Users size={16} className="text-gray-400" />
+                       </div>
+                       <div className="text-sm">
+                         <p className="font-bold text-burgundy text-xs uppercase tracking-wider">Mesa Directiva</p>
+                         <p className="text-gray-500 font-medium text-xs line-clamp-2 leading-snug">{com.board}</p>
+                       </div>
+                     </div>
+                     
+                     {com.manual ? (
+                       <button 
+                         onClick={() => setSelectedManual(com.manual!)}
+                         className="mt-2 text-center text-sm font-bold text-white bg-burgundy py-2.5 px-4 rounded-xl hover:bg-burgundy/90 transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
+                       >
+                         <BookOpen size={16} /> Ver Manual
+                       </button>
+                     ) : (
+                       <button 
+                         disabled
+                         className="mt-2 text-center text-sm font-bold text-gray-400 bg-gray-50 py-2.5 px-4 rounded-xl border border-gray-100 flex items-center justify-center gap-2 cursor-not-allowed"
+                       >
+                         <Clock size={16} /> Pronto aparecerán
+                       </button>
+                     )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -460,9 +424,6 @@ export default function LandingPage({ onEnterPortal, onAdminAccess }: { onEnterP
 
       {/* Event Countdown Section */}
       <section id="inscripciones" className="py-24 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-burgundy/10 via-snow to-snow border-y border-burgundy/10 relative overflow-hidden">
-        {isTimeUp && (
-          <div className="absolute inset-0 z-0 pointer-events-none opacity-50 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gold/30 via-transparent to-transparent animate-pulse mix-blend-overlay"></div>
-        )}
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center relative z-10">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -471,86 +432,36 @@ export default function LandingPage({ onEnterPortal, onAdminAccess }: { onEnterP
           >
             <span className="text-gold font-bold uppercase tracking-widest text-sm mb-4 block">Prepárate</span>
             <h2 className="text-4xl md:text-5xl font-serif font-bold text-burgundy mb-6">
-              {isTimeUp ? '¡El Evento Ha Comenzado!' : 'Cuenta Regresiva al MRBMUN'}
+              Próximo MUN en camino
             </h2>
             <p className="text-gray-600 mb-8 leading-relaxed text-lg">
-              {isTimeUp 
-                ? 'El gran día llegó. MRBMUN 2026 ya está aquí. Nos esperan jornadas increíbles de debate y liderazgo.' 
-                : 'Las inscripciones están oficialmente cerradas. Mantente atento y acompáñanos este 19 de mayo, y el 3 y 4 de junio para vivir la experiencia mundialista.'}
+              Próximo MUN pronto vendrá. Alístense, pronto aparecerán las fechas oficiales del evento.
             </p>
 
-            {isTimeUp ? (
-              <div className="bg-gradient-to-r from-burgundy to-[#b3002d] rounded-2xl p-10 shadow-2xl border border-gold/50 mb-8 flex flex-col items-center justify-center transform hover:scale-105 transition-transform">
-                 <h3 className="text-4xl md:text-6xl font-black text-white italic tracking-wider uppercase drop-shadow-lg scale-110 mb-4 animate-bounce">¡WOW!</h3>
-                 <p className="text-gold font-bold text-xl font-serif text-center drop-shadow-md">BIENVENIDOS A MRBMUN 2026</p>
-                 <div className="mt-6 flex justify-center space-x-2">
-                   <div className="w-2 h-2 rounded-full bg-white animate-ping"></div>
-                   <div className="w-2 h-2 rounded-full bg-white animate-ping" style={{ animationDelay: '0.2s' }}></div>
-                   <div className="w-2 h-2 rounded-full bg-white animate-ping" style={{ animationDelay: '0.4s' }}></div>
-                 </div>
-              </div>
-            ) : (
-              <div className="bg-white rounded-2xl p-6 shadow-md border border-gold/20 mb-8 flex items-center justify-between">
-                <div className="text-center">
-                  <span className="block text-3xl md:text-4xl font-bold text-burgundy">{timeLeft.days}</span>
-                  <span className="text-xs md:text-sm font-bold text-gray-500 uppercase">Días</span>
-                </div>
-                <span className="text-2xl text-gray-300">:</span>
-                <div className="text-center">
-                  <span className="block text-3xl md:text-4xl font-bold text-burgundy">{timeLeft.hours}</span>
-                  <span className="text-xs md:text-sm font-bold text-gray-500 uppercase">Horas</span>
-                </div>
-                <span className="text-2xl text-gray-300">:</span>
-                <div className="text-center">
-                  <span className="block text-3xl md:text-4xl font-bold text-burgundy">{timeLeft.minutes}</span>
-                  <span className="text-xs md:text-sm font-bold text-gray-500 uppercase">Min</span>
-                </div>
-                <span className="text-2xl text-gray-300">:</span>
-                <div className="text-center">
-                  <span className="block text-3xl md:text-4xl font-bold text-burgundy">{timeLeft.seconds}</span>
-                  <span className="text-xs md:text-sm font-bold text-gray-500 uppercase">Seg</span>
-                </div>
-              </div>
-            )}
+            <div className="bg-gradient-to-r from-burgundy to-[#b3002d] rounded-2xl p-10 shadow-2xl border border-gold/50 mb-8 flex flex-col items-center justify-center transform hover:scale-105 transition-transform">
+               <h3 className="text-4xl md:text-5xl font-black text-white italic tracking-wider uppercase drop-shadow-lg scale-110 mb-4 animate-pulse text-center">¡MUY PRONTO!</h3>
+               <p className="text-gold font-bold text-xl font-serif text-center drop-shadow-md">NUEVAS EXPERIENCIAS</p>
+               <div className="mt-6 flex justify-center space-x-2">
+                 <div className="w-2 h-2 rounded-full bg-white animate-ping"></div>
+                 <div className="w-2 h-2 rounded-full bg-white animate-ping" style={{ animationDelay: '0.2s' }}></div>
+                 <div className="w-2 h-2 rounded-full bg-white animate-ping" style={{ animationDelay: '0.4s' }}></div>
+               </div>
+            </div>
 
-            {!isTimeUp && (
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-8 inline-block">
-                 <p className="text-gray-700 font-medium flex items-center gap-2">
-                   <CheckCircle className="text-gold" size={20} />
-                   Cupos llenos. ¡Gracias por el increíble apoyo!
-                 </p>
-              </div>
-            )}
           </motion.div>
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="bg-white p-10 md:p-12 rounded-[2.5rem] shadow-2xl shadow-burgundy/5 border border-gray-100 relative overflow-hidden group"
+            className="bg-white p-10 md:p-12 rounded-[2.5rem] shadow-2xl shadow-burgundy/5 border border-gray-100 relative overflow-hidden group flex flex-col items-center justify-center text-center"
           >
              <div className="absolute top-0 right-0 w-32 h-32 bg-gold/10 rounded-bl-full -z-0 group-hover:scale-110 transition-transform duration-500"></div>
              <Calendar className="text-gold mb-8 relative z-10" size={56} strokeWidth={1.5} />
-             <h3 className="text-3xl font-serif font-bold text-burgundy mb-8 relative z-10">Fechas Oficiales</h3>
-             <div className="space-y-8 relative z-10 before:absolute before:inset-0 before:left-[11px] before:h-full before:w-px before:bg-gray-100">
-                <div className="relative pl-8">
-                  <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-white border-4 border-gold shadow-sm flex items-center justify-center"></div>
-                  <p className="text-xs font-bold text-gold uppercase tracking-widest mb-1">Día 1</p>
-                  <p className="font-bold text-gray-900 text-lg">Inauguración y Primeros Debates</p>
-                  <p className="text-gray-500">19 de Mayo del 2026</p>
-                </div>
-                <div className="relative pl-8">
-                  <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-snow border-4 border-gray-300 shadow-sm flex items-center justify-center"></div>
-                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Día 2</p>
-                  <p className="font-bold text-gray-900 text-lg">Desarrollo de Crisis y Resoluciones</p>
-                  <p className="text-gray-500">3 de Junio del 2026</p>
-                </div>
-                <div className="relative pl-8">
-                  <div className="absolute left-0 top-1 w-6 h-6 rounded-full bg-snow border-4 border-gray-300 shadow-sm flex items-center justify-center"></div>
-                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Día 3</p>
-                  <p className="font-bold text-gray-900 text-lg">Clausura y Premiación</p>
-                  <p className="text-gray-500">4 de Junio del 2026</p>
-                </div>
-             </div>
+             <h3 className="text-3xl font-serif font-bold text-burgundy mb-4 relative z-10">Fechas Oficiales</h3>
+             <p className="text-gray-500 relative z-10 mb-8 text-lg">
+               Las fechas del próximo evento serán anunciadas próximamente. ¡Mantente atento!
+             </p>
+             <div className="w-16 h-1 bg-gradient-to-r from-burgundy to-gold rounded-full relative z-10"></div>
           </motion.div>
         </div>
       </section>
