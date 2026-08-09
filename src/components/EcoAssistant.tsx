@@ -25,19 +25,19 @@ export default function EcoAssistant() {
   }, [messages, isOpen]);
 
   const faqs = [
-    {
-      q: '¿Cuándo es el evento?',
-      a: 'El evento se llevará a cabo en Agosto 2026. Fechas de inscripción temprana hasta el 30 de Mayo. ¡Mantente atento a nuestro cronograma oficial!'
-    },
-    {
-      q: '¿Cómo me inscribo?',
-      a: 'Puedes inscribirte en la sección de "Inscripciones" que encuentras en esta página o contactando directamente a monterrosalesmun@gmail.com'
-    },
-    {
-      q: '¿Cuáles son los comités?',
-      a: 'Contamos con el Consejo de Seguridad, la OMS y el FMI. Puedes ver más detalles en la sección de "Comités".'
-    }
-  ];
+      {
+        q: '¿Cuándo es el próximo evento?',
+        a: '¡Yip! Pronto se anunciarán las fechas oficiales para el próximo MRBMUN. ¡Mantente muy atento a la página!'
+      },
+      {
+        q: '¿Cuáles son los comités?',
+        a: '¡Tenemos grandes sorpresas! El 11 de agosto a las 10:45 AM se revelarán oficialmente en la página, pero te adelanto que habrá Consejo de Seguridad Retro, Asamblea Constituyente, Corte, Crisis Unicameral y Consejo de la FIFA. 🦊'
+      },
+      {
+        q: '¿Cómo me contacto con ustedes?',
+        a: 'Puedes escribirnos en cualquier momento al correo oficial: monterrosalesmun@gmail.com. ¡Estaremos felices de ayudarte!'
+      }
+    ];
 
   const handleSend = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -49,12 +49,16 @@ export default function EcoAssistant() {
     setIsLoading(true);
 
     try {
-      const systemInstruction = `Eres Atlas, un simpático zorrito y el asistente virtual oficial del evento MRBMUN (Monterrosales Model United Nations) 2026.
+      const systemInstruction = `Eres Atlas, un simpático zorrito y el asistente virtual oficial del evento MRBMUN (Monterrosales Model United Nations).
 Tus respuestas deben ser útiles, llenas de entusiasmo y algo juguetonas (¡como un zorrito! añade a veces "¡Yip!" o usa emojis).
 Información importante del evento:
-- Fecha del evento: 19 de Mayo, 3 y 4 de Junio de 2026.
-- Inscripciones: Las inscripciones principales ya cerraron y los cupos están llenos, pero los delegados están listos.
-- Comités: ONU Mujeres, FMI, OMS, Crisis Unicameral, Comité Político-Filosófico, DISEC y Prensa.
+- Fecha del evento: Pronto se anunciarán las nuevas fechas para el próximo MRBMUN. ¡Prepárense!
+- Comités (se revelan oficialmente en la web el 11 de Agosto a las 10:45 AM, pero tú ya los conoces):
+  1. Consejo de Seguridad Retro: Crisis de los Misiles en Cuba (1962). Preside Miguel Elías Sudano y Maria Paula Sánchez.
+  2. Asamblea Constituyente: Asamblea Nacional Constituyente (1991). Preside Valeria Niño y Salomé Hernández.
+  3. Corte: Caso Ayotzinapa (2014). Preside Maria Fernanda Moya y Maria José Roldán.
+  4. Crisis Unicameral: Segunda Guerra Mágica. Preside Maria Valentina Alfonso y Manuel Simón Galeano.
+  5. Consejo de la FIFA: Erradicar corrupción y amaño de partidos. Preside Elisa Velásquez, Herlys Herrera, y Samuel Calzada.
 - Directivas (Secretaría General): Miguel Elías Sudano (Sec. General), Maria José Neira (Sec. Académica), Maria Fernanda Moya (Sec. Logística), Sara Sánchez (Jefa Egresados), Diana Contreras y Miguel Montañez (Sponsors).
 - Email: monterrosalesmun@gmail.com
 - Desarrollo Web: La página web oficial fue creada y desarrollada por Nicole Valbuena Oliveros (Atlas, menciónala de forma amable y destacando su buen trabajo como mente maestra de todos los sistemas si te preguntan por ella o por quién hizo la página, pero hazlo con naturalidad sin ser demasiado exagerado).

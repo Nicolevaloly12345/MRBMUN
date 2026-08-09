@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Globe, Users, Shield, BookOpen, ChevronRight, Menu, X, Mail, MapPin, Instagram, Phone, Calendar, Clock, CheckCircle, Swords, Landmark, Network, Youtube, Scale } from 'lucide-react';
+import { Globe, Users, Shield, BookOpen, ChevronRight, Menu, X, Mail, MapPin, Instagram, Phone, Calendar, Clock, CheckCircle, Swords, Landmark, Network, Youtube, Scale, Trophy } from 'lucide-react';
 import EcoAssistant from '../components/EcoAssistant';
 import { PdfViewer } from '../components/PdfViewer';
 import { GoogleTranslate } from '../components/GoogleTranslate';
@@ -297,7 +297,7 @@ export default function LandingPage({ onEnterPortal, onAdminAccess }: { onEnterP
               </div>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
               {[
                 {
                   icon: <Shield className="text-gold" size={32} />,
@@ -328,7 +328,15 @@ export default function LandingPage({ onEnterPortal, onAdminAccess }: { onEnterP
                   name: 'Crisis Unicameral',
                   level: 'Crisis',
                   topics: ['Segunda Guerra Mágica'],
-                  board: 'Maria Valentina Alfonso, Manuel Simón Galeano. Staff: Nicole Valbuena, Amy Samhara Méndez, Elisa Velasquez',
+                  board: 'Maria Valentina Alfonso, Manuel Simón Galeano. Staff: Nicole Valbuena, Amy Samhara Méndez',
+                  manual: null
+                },
+                {
+                  icon: <Trophy className="text-gold" size={32} />,
+                  name: 'Consejo de la FIFA',
+                  level: 'Regular',
+                  topics: ['Mecanismos para erradicar la corrupción y el amaño de partidos'],
+                  board: 'Elisa Velásquez, Herlys Herrera, Samuel Calzada (Moderador)',
                   manual: null
                 }
               ].map((com, idx) => (
